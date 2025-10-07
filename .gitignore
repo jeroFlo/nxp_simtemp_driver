@@ -1,0 +1,9 @@
+*.o
+*.ko
+*.exe
+
+.vscode/
+
+.env
+
+*.log

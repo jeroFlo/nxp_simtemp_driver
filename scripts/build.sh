@@ -2,12 +2,14 @@
 
  # - builds the kernel module 
  
- path=$PWD/../kernel # asumming user will run it from its root
+ makefile_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )/../kernel
 
  if [ -n "$1" ]; then # check for a user input 
-    path=$1
+    makefile_path=$1
+    echo "*** Overriding Makefile path by the user input ***"
  fi
 
- make -C /lib/modules/`uname -r`/build M=$path modules
+ make -C /lib/modules/`uname -r`/build M=$makefile_path modules
+
 
  # - user app

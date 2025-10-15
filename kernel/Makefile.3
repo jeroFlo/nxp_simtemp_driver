@@ -1,5 +1,29 @@
-all:
-	make -C /lib/modules/`uname -r`/build M=$(PWD) modules
-obj-m += skeleton.o
+# Makefile to build the nxp_simtemp kernel module into Kbuild directory
+
+# Kernel source tree (defaults to current kernel build headers)
+KERNEL_DIR ?= /lib/modules/`uname -r`/build
+
+# Output directory for module build artifacts
+OUTPUT_DIR := $(PWD)/Kbuild
+
+# Module name and source file
+MODULE_NAME := nxp_simtemp
+obj-m := $(MODULE_NAME).o
+
+# Default target: build the module
+all: $(OUTPUT_DIR)/$(MODULE_NAME).ko
+
+# Ensure output directory exists
+$(OUTPUT_DIR):
+	mkdir -p $(OUTPUT_DIR)
+
+# Build the kernel module
+$(OUTPUT_DIR)/$(MODULE_NAME).ko: $(MODULE_NAME).c | $(OUTPUT_DIR)
+	$(MAKE) -C $(KERNEL_DIR) M=$(PWD) O=$(OUTPUT_DIR) modules
+
+# Clean build artifacts
 clean:
-	rm -rf *.o *.ko *.mod.c .an* .lab* .tmp_versions Module.symvers Module.markers modules.order .*.cmd *.mod
+	$(MAKE) -C $(KERNEL_DIR) M=$(PWD) O=$(OUTPUT_DIR) clean
+	rm -rf $(OUTPUT_DIR)
+
+.PHONY: all clean

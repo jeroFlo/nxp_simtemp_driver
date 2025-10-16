@@ -12,3 +12,6 @@ static ssize_t std_write(struct file *, const char *, size_t, loff_t *);
 
 
 static int std_dev_uevent(struct device *, struct kobj_uevent_env *); 
+
+
+static void temp_timer_callback(struct timer_list *);
